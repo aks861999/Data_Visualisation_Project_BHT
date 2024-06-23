@@ -12,6 +12,9 @@ body {
   font-weight: 300;
   line-height: 1.4;
   scroll-behavior: smooth;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 a {
