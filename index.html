@@ -732,16 +732,122 @@
 
                             </p <section id="4.4.1">
                             <h3>4.4.1 Heatmap Visualisation : Accuracy of trials across all Sheets</h3>
+                            <p>
+                                The script visualizes these findings by plotting 13 heatmaps, illustrating the accuracy
+                                of trials across all sheets, with each heatmap representing a different sheet's data.
+                                These visualizations help in understanding how closely each trial card matches the
+                                master card, aiding in evaluating experimental outcomes efficiently.
+                            </p>
                             <img src="https://i.imghippo.com/files/qSVcl1719183247.png" alt="Image" width="700"
                                 height="auto" class="center">
+
+                            <h3><strong>The Code Snippet </strong></h3>
+                            <pre><code>
+    # Plotting the 13 heatmaps
+    fig, axs = plt.subplots(4, 4, figsize=(15, 15))
+    axs = axs.flatten()
+
+    for idx, card in enumerate(min_delta_e_cards):
+        delta_e_matrix = calculate_delta_e_matrix(card, master_card)
+        sns.heatmap(delta_e_matrix, cmap='Blues_r', cbar=False, ax=axs[idx])
+        axs[idx].invert_yaxis()  # Invert the y-axis
+
+        axs[idx].set_title(f'Sheet {idx + 1}')
+        axs[idx].axis('off')
+
+    # Remove extra subplots
+    for idx in range(len(min_delta_e_cards), len(axs)):
+        fig.delaxes(axs[idx])
+
+    # Add a colorbar
+    fig.subplots_adjust(bottom=0.1)
+    cbar_ax = fig.add_axes([0.25, 0.05, 0.5, 0.02])
+    fig.colorbar(axs[0].collections[0], cax=cbar_ax, orientation='horizontal', label='Delta E')
+
+    plt.suptitle('Heatmap : Accuracy of trials across all Sheets', y=0.95, fontsize=25)
+    plt.show()
+
+</code></pre>
                     </section>
 
                     <section id=" 4.4.2">
-                            <h3>4.4.2 Circular Color Difference with MasterCard : Accuracy of trials across Sheets
-                            </h3>
+                        <h3>4.4.2 Circular Color Difference with MasterCard : Accuracy of trials across Sheets
+                        </h3>
 
-                            <img src="https://i.imghippo.com/files/4e6l91719183307.png" alt="Image" width="1200"
-                                height="auto" class="center">
+                        <p>
+
+                            We visualize the color differences by plotting 13 subplots (arranged in a 3x5 grid) using Matplotlib. Each subplot represents a sheet from our dataset, where we identify and highlight the color card with the minimal delta E (color difference) compared to a predefined master card. Circles within each subplot depict the Lab color values of the ideal card (found to have minimal delta E) and the master card. The color of each square indicates the magnitude of color difference between the ideal card and the master card, ranging from black (no difference) to white (maximum difference). This visual approach helps in understanding how closely each experimental trial matches the master card, aiding in evaluating trial accuracy across all sheets effectively.
+                        </p>
+
+                        <img src="https://i.imghippo.com/files/4e6l91719183307.png" alt="Image" width="1200"
+                            height="auto" class="center">
+                        <h3><strong>The Code Snippet </strong></h3>
+<pre><code>
+    # Iterate through each sheet to plot minimum delta E cards
+    plot_counter = 0
+    for sheet_id, sheet in demo_sheets.items():
+        if plot_counter >= 13:  # Adjust to the number of sheets you want to visualize
+            break
+
+        min_delta_e = float('inf')
+        min_card = None
+
+        # Find the card with minimum delta E in the current sheet
+        for card_id, card in sheet.items():
+            delta_e = np.mean([color_difference(card.iloc[i], master_card_df.iloc[i]) for i in range(len(card))])
+            if delta_e < min_delta_e:
+                min_delta_e = delta_e
+                min_card = card_id
+
+        # Plotting the minimum delta E card for the current sheet
+        ideal_card = sheet[min_card]
+
+        # Set axis limits
+        axes[plot_counter].set_xlim(0, 8)
+        axes[plot_counter].set_ylim(0, 8)
+
+        # Invert y-axis to correct orientation
+        #axes[plot_counter].invert_yaxis()
+
+        for i in range(8):
+            for j in range(8):
+                color_diff = color_difference(ideal_card.iloc[i*8 + j], master_card_df.iloc[i*8 + j])
+                intensity = color_diff / 100.0  # Normalize to range [0, 1]
+                color = plt.cm.gray(1 - intensity)  # Black to white
+
+                # Plotting the colored square
+                rect = patches.Rectangle((j, i), 1, 1, color=color, alpha=1.0)
+                axes[plot_counter].add_patch(rect)
+
+                # Plotting the circles for ideal_card and master_card
+                ideal_color = lab_to_rgb(ideal_card.iloc[i*8 + j]['L'], ideal_card.iloc[i*8 + j]['a'], ideal_card.iloc[i*8 + j]['b'])
+                master_color = lab_to_rgb(master_card_df.iloc[i*8 + j]['L'], master_card_df.iloc[i*8 + j]['a'], master_card_df.iloc[i*8 + j]['b'])
+
+                ideal_circle = patches.Circle((j + 0.35, i + 0.5), 0.3, edgecolor='none', facecolor=ideal_color)
+                master_circle = patches.Circle((j + 0.65, i + 0.5), 0.3, edgecolor='none', facecolor=master_color)
+
+                axes[plot_counter].add_patch(ideal_circle)
+                axes[plot_counter].add_patch(master_circle)
+
+        # Set title for each subplot
+        axes[plot_counter].set_title(f'Sheet {sheet_id}')
+        axes[plot_counter].set_xticks([])
+        axes[plot_counter].set_yticks([])
+
+        plot_counter += 1
+
+    # Create a colorbar below the plot
+    norm = Normalize(vmin=0, vmax=100)  # Adjust according to your maximum color difference
+    sm = ScalarMappable(cmap='Greys', norm=norm)
+
+    # Adjust layout to include colorbar below the plot
+    fig.tight_layout(rect=[0, 0, 1, 0.95])  # Adjust the bottom margin as needed
+
+    # Show the plot
+    plt.suptitle("Circular Color Difference : Accuracy of trials across Sheets", fontsize=20, y=1.02)
+    plt.show()
+
+</code></pre>
                     </section>
 
                 </article>
