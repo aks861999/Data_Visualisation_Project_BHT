@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Color Measurements of Douglas Color Cards</title>
     <link rel="stylesheet" href="style.css" />
-    
+
 </head>
 
 <body>
@@ -25,6 +25,14 @@
                     <li><a href="#Color_Dispersion_Across_Sheets">2.3 Color Dispersion Across Sheets</a></li>
                 </ul>
                 <li><a href="#Data_Preprocessing">3. Data Preprocessing</a></li>
+                <li><a href="#Data_Loading_and_Initialization">3.1 Data Loading and Initialization</a></li>
+                <li><a href="#Sheet_Data_Extraction_and_Concatenation">3.2 Sheet Data Extraction and Concatenation</a>
+                </li>
+                <li><a href="#Reshape_Data_for_Analysis">3.3 Reshape Data for Analysis</a></li>
+                <li><a href="#Create_Nested_Dictionaries">3.4 Create Nested Dictionaries</a></li>
+
+
+
                 <li><a href="#Visualization_DeltaE_Values" onclick="toggleSubSections('visualization')">4. Visualization
                         of ΔE Values</a></li>
                 <ul id="subSectionList_visualization">
@@ -32,7 +40,13 @@
                     <li><a href="#DeltaE_Heatmap">4.2 ΔE Heatmap</a></li>
                     <li><a href="#Ring_Map">4.3 Ring Map</a></li>
                 </ul>
+                <li><a href="#Variance Calculation">5. Variance Calculation </a></li>
+            </ul>
+            <ul>
                 <li><a href="#Closest_Cards_to_Mean_Visualization">6. Closest Cards to Mean Visualization</a></li>
+            </ul>
+            <ul>
+                <li><a href="#Conclusion">7. Conclusion</a></li>
             </ul>
         </nav>
     </header>
@@ -55,17 +69,18 @@
                 <p>We will visualize the data to understand:</p>
                 <ul>
                     <li>How do colors behave relative to the print master?</li>
-                    <li>Color dispersion on individual Lab scales and in 3D Lab space</li>
+                    <li>Color dispersion on individual Lab scales </li>
                     <li>Differential behavior between targets and color spots</li>
                     <li>Quality concerning the intended color</li>
                 </ul>
                 <p>The project involves the following steps:</p>
                 <ul>
                     <li>Reading and preprocessing the data</li>
+                    <li>Analyzing color dispersion and consistency across sheets</li>
                     <li>Visualizing intended colors and measured colors</li>
                     <li>Calculating color differences (ΔE values)</li>
                     <li>Analyzing Variance Across Sheets</li>
-                    <li>Analyzing color dispersion and consistency across sheets</li>
+
                 </ul>
             </article>
         </section>
@@ -126,84 +141,105 @@
             <h2>3. Data Preprocessing</h2>
             <article>
 
+                <section id="Data_Loading_and_Initialization">
+                    <h3>3.1 Data Loading and Initialization</h3>
+                    <ul>
+                        <li>Read and import the lab measurement data from the CSV file.
+                            <pre><code>df_lab = pd.read_csv("LabMeasurements-Color-Card.csv",sep=';', decimal=',') </code></pre>
+                        </li>
+                        <li>Initialize the dictionary to store data for each sheet.
+                            <pre><code>sheets = {} </code> </pre>
+                        </li>
+                    </ul>
+                </section>
 
-                <h3>Data Loading and Initialization</h3>
-                <ul>
-                    <li>Read and import the lab measurement data from the CSV file.
-                        <pre><code>df_lab = pd.read_csv("LabMeasurements-Color-Card.csv",sep=';', decimal=',') </code></pre>
-                    </li>
-                    <li>Initialize the dictionary to store data for each sheet.
-                        <pre><code>sheets = {} </code> </pre>
-                    </li>
-                </ul>
 
-                <h3>Sheet Data Extraction and Concatenation</h3>
-                <ul>
-                    <li>Iterate through each sheet to extract relevant data based on rows and columns.</li>
-                    <li>Concatenate selected data into a comprehensive DataFrame for each sheet.
-                        <pre><code>new_df = pd.concat(sheet_1, axis=1).T.reset_index(drop=True)</code></pre>
-                    </li>
-                </ul>
+                <section id="Sheet_Data_Extraction_and_Concatenation">
 
-                <h3>Reshape Data for Analysis</h3>
-                <ul>
-                    <li>Extracting and reshaping to prepare for structured storage.
+                    <h3>3.2 Sheet Data Extraction and Concatenation</h3>
+                    <ul>
+                        <li>Iterate through each sheet to extract relevant data based on rows and columns.</li>
+                        <li>Concatenate selected data into a comprehensive DataFrame for each sheet.
+                            <pre><code>new_df = pd.concat(sheet_1, axis=1).T.reset_index(drop=True)</code></pre>
+                        </li>
+                    </ul>
+
+                </section>
+
+
+                <section id="Reshape_Data_for_Analysis">
+
+
+
+                    <h3>3.3 Reshape Data for Analysis</h3>
+                    <ul>
+                        <li>Extracting and reshaping to prepare for structured storage.
+                            <pre><code>
+                                    for index, row in test_df.iterrows():
+                                        # Iterate over each 8x8 block in the row
+                                        for i in range(1, 9):
+                                            for j in range(1, 9):
+                                                # Extract the L, a, b values for the block
+                                                L = row[f'L{i}{j}']
+                                                a = row[f'a{i}{j}']
+                                                b = row[f'b{i}{j}']
+
+                                                # Append the values to the reshaped data
+                                                reshaped_data.append({
+                                                    'row': initial_row,
+                                                    'column': initial_column,
+                                                    'L': L,
+                                                    'a': a,
+                                                    'b': b
+                                                })</code></pre>
+                        </li>
+                        <li>Creating <code>reshaped_df</code> to organize color card data into a structured format.</li>
                         <pre><code>
-                    for index, row in test_df.iterrows():
-                        # Iterate over each 8x8 block in the row
-                        for i in range(1, 9):
-                            for j in range(1, 9):
-                                # Extract the L, a, b values for the block
-                                L = row[f'L{i}{j}']
-                                a = row[f'a{i}{j}']
-                                b = row[f'b{i}{j}']
+                                    reshaped_df = reshaped_df.astype({
+                                        'row': int,
+                                        'column': int,
+                                        'L': float,
+                                        'a': float,
+                                        'b': float
+                                    })
+                </code></pre>
+                        </li>
+                    </ul>
 
-                                # Append the values to the reshaped data
-                                reshaped_data.append({
-                                    'row': initial_row,
-                                    'column': initial_column,
-                                    'L': L,
-                                    'a': a,
-                                    'b': b
-                                })</code></pre>
-                    </li>
-                    <li>Creating <code>reshaped_df</code> to organize color card data into a structured format.</li>
-                </ul>
-
-                <h3>Creating Nested Dictionaries</h3>
-                <ul>
-                    <li>Building nested dictionaries (<code>sheets</code>) where each sheet number serves as a key.</li>
-                    <li>Populating <code>list_of_cards</code> dictionaries within each sheet to store color card data
-                        (<code>reshaped_df</code>).</li>
-                </ul>
-
-                <h2>Implementation and Output</h2>
-                <ul>
-                    <li>Implementing the described logic using Python and Pandas.</li>
-                    <li>Printing current sheet numbers during the execution for tracking progress.</li>
-                </ul>
-
-                <h2>Conclusion</h2>
-                <ul>
-                    <li>Summary of the achieved data structure transformation.</li>
-                    <li>Overview of the hierarchical organization for efficient data retrieval and manipulation.</li>
-                </ul>
+                </section>
 
 
 
 
 
+                <section id="Create_Nested_Dictionaries">
+
+                    <h3>3.4 Create Nested Dictionaries</h3>
+                    <ul>
+                        <li>In this step we have created the dictionary of dictionaries where each key of the parent
+                            dictionary is the sheet number, and the value is the dictionary of that particular sheet ,
+                            for the child dictionary, key is the 'card'number, value is the 'L,a,b' dataframe.
+                        </li>
+                        <li>Next we have populated dictionaries within each sheet to store color card data.
+                        </li>
+                        <pre><code>sheets[f'{no_sheets}'] = list_of_cards</code></pre>
+                    </ul>
 
 
-
-
-
+                </section>
 
             </article>
         </section>
+
+
+        
         <section id="Visualization_DeltaE_Values">
             <h2>4. Visualization of ΔE Values</h2>
             <article>
+
+                <p>
+                    This section explains how to calculate the color difference (ΔE) between two 8x8 color cards using the given Python code and Visualise afterwards.
+                </p>
             </article>
             <section id="Difference_Between_Two_Cards">
                 <h3>4.1 Difference Between Two Cards</h3>
@@ -213,6 +249,8 @@
                     </p>
                 </article>
             </section>
+
+            
             <section id="DeltaE_Heatmap">
                 <h3>4.2 ΔE Heatmap</h3>
                 <article>
@@ -240,6 +278,15 @@
                 </article>
             </section>
         </section>
+
+        <section id="Variance Calculation">
+            <h2>5. Variance Calculation</h2>
+            <article>
+                <p>
+                    all varianceof 13 sheets.
+                </p>
+            </article>
+        </section>
         <section id="Closest_Cards_to_Mean_Visualization">
             <h2>6. Closest Cards to Mean Visualization</h2>
             <article>
@@ -248,7 +295,7 @@
                     can observe the level of uniformity and variation within each sheet. A bar chart is created where
                     each bar represents a sheet, with the height of the bar indicating the distance of the closest color
                     card to the mean color value for that sheet. Random colors are generated for each sheet to make the
-                    bars visually distinct.
+                    bars visually distinct.Variance Calculation
                 </p>
                 <p>
                     This bar chart provides a clear visual comparison of color consistency across different sheets. Each
@@ -261,13 +308,24 @@
                     which ones show significant variation.
                 </p>
             </article>
-            <footer>
-                <img src="https://i.ibb.co/7QJGPGk/colord-Histogram.jpg" alt="colord-Histogram" />
-                
-            </footer>
         </section>
+        <footer>
+            <img src="https://i.ibb.co/7QJGPGk/colord-Histogram.jpg" alt="colord-Histogram" />
+        </footer>
+
+
+
+        <section id="Conclusion">
+            <h2>7. Conclusion</h2>
+            <article>
+                <p>
+                    .................
+                </p>
+            </article>
+        </section>
+
     </main>
-    
+
 </body>
 
 </html>
