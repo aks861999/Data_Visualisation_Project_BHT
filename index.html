@@ -62,8 +62,29 @@
 
 
                     <li><a href="#DeltaE_Heatmap">4.2 ΔE Heatmap</a></li>
-                    <li><a href="#Ring_Map">4.3 Ring Map</a></li>
+                    <li><a href="#Ring_Map">4.3 Donut Chart</a></li>
+                    <ul>
+                        <li><a href="#The_Intution_Behind_Shared_Error">4.3.1 The_Intution_Behind_Shared_Error</a></li>
+                        <li><a href="#Identifying_the_Card_with_Minimum_ΔE">4.3.2 Identifying the Card with Minimum
+                                ΔE</a></li>
+                        <li><a href="#Identifying_Best_Trial_Cards">4.3.3 Identifying Best Trial Cards</a></li>
+                        <li><a href="#Ranking_Sheets_by_ΔE">4.3.4 Ranking Sheets by ΔE</a></li>
+                        <li><a href="#Visualizing_Error_Contribution">4.3.5 Visualizing Error Contribution</a></li>
+                        <li><a href="#Ring Plot Visualisation for Shared Error Contribution">4.3.6 Donut Chart
+                                Visualisation for Shared Error Contribution</a></li>
+
+                    </ul>
+
+                    <li><a href="#Acurracy_of_Trials_across_all_the_sheets"> 4.4 Acurracy of Trials across all the
+                            sheets </a></li>
+                    <ul>
+                        <li><a href="#4.4.1">4.4.1 Heatmap Visualisation : Accuracy of trials across all Sheets</a></li>
+                        <li><a href="#4.4.2">4.4.2 Circular Color Difference with MasterCard : Accuracy of trials across
+                                Sheets</a></li>
+                    </ul>
                 </ul>
+
+
                 <li><a href="#Variance Calculation">5. Variance Calculation </a></li>
             </ul>
             <ul>
@@ -540,40 +561,202 @@
 
             <section id="Ring_Map">
                 <h3>4.3 Shared Error Contribution of all 13 Trials </h3>
+
+
                 <article>
+
                     <p>
                         In this step, we are trying to find the shared error contribution of all 13 trials.
-                    <h3><strong> The Intution :</strong></h3>
-                    <p>
-                        The idea is to find the a specific card from each sheet, that has minimum color difference or
-                        minimum del E to the MasterCard among all 42 cards, out of all 13 sheets. So at the end of this
-                        step, we will have a list of 13 cards that have minimum color difference or minimum del E to the
-                        MsterCard, we may call these 13 cards as "Best Trial Card" for each sheet out of all 13 sheets.
-                        Next we should understand that those 13 cards will have little variation from the MasterCard,
-                        but how much do each so called "Best Cards" contribute to the total measurement error ?, Let's
-                        try to find out step-by-step.
-                    </p>
+                    <section id="The_Intution_Behind_Shared_Error">
+                        <h3><strong>4.3.1 The Intution Behind Shared Error :</strong></h3>
+
+                        <p>
+                            The idea is to find the a specific card from each sheet, that has minimum color difference
+                            or
+                            minimum del E to the MasterCard among all 42 cards, out of all 13 sheets. So at the end of
+                            this
+                            step, we will have a list of 13 cards that have minimum color difference or minimum del E to
+                            the
+                            MsterCard, we may call these 13 cards as "Best Trial Card" for each sheet out of all 13
+                            sheets.
+                            Next we should understand that those 13 cards will have little variation from the
+                            MasterCard,
+                            but how much do each so called "Best Cards" contribute to the total trial error ?, Let's
+                            try to find out step-by-step.
+                        </p>
+                    </section>
+
+                    <section id="Identifying_the_Card_with_Minimum_ΔE">
+                        <h3><strong>4.3.2 Identifying the Card with Minimum ΔE :</strong></h3>
+                        <p>
+                            To find the card with the minimum ΔE in each sheet, we define a function that iterates
+                            through all cards in a sheet that calculates the average ΔE for each card when compared to
+                            the MasterCard, and identifies the card with the lowest average ΔE.
+                        </p>
+                        <pre><code>
+        # Find the card with the minimum delta E in each sheet
+        def find_min_delta_e_card(sheet):
+            min_delta_e = float('inf')
+            min_card = None
+            for card_id, card in sheet.items():
+                delta_e = np.mean([color_difference(card.iloc[i], master_card.iloc[i]) for i in range(len(card))])
+                if delta_e < min_delta_e:
+                    min_delta_e = delta_e
+                    min_card = card_id
+            return min_card, min_delta_e
+
+    </code></pre>
+                        <p>
+                            This function find_min_delta_e_card ensures we identify the card that best matches the
+                            MasterCard from each sheet.
+                        </p>
+                    </section>
 
 
-                    <h3><strong> Visualise Error Contribution :</strong></h3>
-                    
-                    <footer>
-                        <img src="https://i.imghippo.com/files/WQMZ31719178442.png" alt="Hotmap" />
-                    </footer>
+
+
+                    <section id="Identifying_Best_Trial_Cards">
+                        <h3><strong>4.3.3 Identifying Best Trial Cards :</strong></h3>
+                        <p>
+                            We apply the find_min_delta_e_card function across all sheets to identify the "Best Trial
+                            Card" for each sheet and record the minimum ΔE values.
+                        </p>
+                        <pre><code>
+    min_delta_e_values = []
+    for sheet_id, sheet in demo_sheets.items():
+       min_card, min_delta_e = find_min_delta_e_card(sheet)
+       min_delta_e_values.append((sheet_id, min_delta_e))
+</code></pre>
+                        <p>
+                            This process yields a list of tuples where each tuple contains a sheet ID and the
+                            corresponding minimum ΔE value.
+                        </p>
+                    </section>
 
 
 
-                    </p>
-                    <br>
+
+
+
+                    <section id="Ranking_Sheets_by_ΔE">
+                        <h3><strong>4.3.4 Ranking Sheets by ΔE:</strong></h3>
+                        <p>
+                            Next, we rank the sheets based on their minimum ΔE values. We also calculate the total ΔE
+                            and the percentage contribution of each sheet to this total. By sorting and calculating
+                            percentages, we can better understand which sheets have the closest match to the MasterCard
+                            and their relative contributions to the total error.
+                        </p>
+                        <pre><code>
+    # Rank the sheets by delta E values
+    min_delta_e_values.sort(key=lambda x: x[1])
+    total_delta_e = sum([x[1] for x in min_delta_e_values])
+    percentages = [(x[0], (x[1] / total_delta_e) * 100) for x in min_delta_e_values]
+
+</code></pre>
+
+                    </section>
+
+
+
+                    <section id="Visualizing_Error_Contribution">
+                        <h3><strong>4.3.5 Visualizing Error Contribution :</strong></h3>
+                        <p>
+                            To visualize the error contribution of each sheet, we create a ring plot (donut chart)
+                            showing the percentage contribution of each sheet to the total trial error.
+                        </p>
+                        <pre><code>
+    import matplotlib.pyplot as plt
+
+    # Plotting the ring plot
+    fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(aspect="equal"))
+
+    data = [x[1] for x in percentages]
+    labels = [f'Sheet {x[0]}\n{round(x[1], 2)}%' for x in percentages]
+
+    wedges, texts = ax.pie(data, wedgeprops=dict(width=0.3), startangle=-40)
+
+    # Annotate with sheet numbers and percentages
+    for i, p in enumerate(wedges):
+        ang = (p.theta2 - p.theta1) / 2. + p.theta1
+        y = np.sin(np.deg2rad(ang))
+        x = np.cos(np.deg2rad(ang))
+
+        horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+
+        # Add straight line connection
+        ax.annotate(labels[i], xy=(x, y), xytext=(1.35 * x, 1.4 * y),
+                    horizontalalignment=horizontalalignment,
+                    bbox=dict(boxstyle="round,pad=0.5", fc="w"),
+                    arrowprops=dict(arrowstyle="-", connectionstyle="arc3,rad=0.0"))
+
+    plt.suptitle("Error Contribution of All 13 Sheets", fontsize=20, y=1.02)
+    plt.show()
+</code></pre>
+
+                    </section>
+
+
+
+
+
+
+
+
+                    <section id="Ring Plot Visualisation for Shared Error Contributio">
+
+                        <h3><strong>4.3.6 Donut Chart Visualisation for Shared Error Contributio :</strong></h3>
+
+                        <footer>
+                            <img src="https://i.imghippo.com/files/WQMZ31719178442.png" alt="Hotmap" />
+                        </footer>
+                    </section>
+
+
+
+
+                    <section id="Acurracy_of_Trials_across_all_the_sheets">
+                        <h3>4.4 Acurracy of Trials across all the sheets </h3>
+
+
+                        <article>
+
+                            <p>
+                                IN this step, we are trying to visualise how is the color difference between Mastercard
+                                and the 'Best Card' with "minimum del E" amongst each sheet across all 13 sheets.
+
+                            <p>
+                                If the plots are scrutinised closely then it can be easily intrepreted that for each
+                                sheet there is a strong difference in color between (6,2) squares of MasterCard and the
+                                "Best card" with minimum del E in that specific sheet amongst 42 cards.
+                            </p>
+
+                            </p <section id="4.4.1">
+                            <h3>4.4.1 Heatmap Visualisation : Accuracy of trials across all Sheets</h3>
+                            <img src="https://i.imghippo.com/files/qSVcl1719183247.png" alt="" border="0">
+                    </section>
+
+                    <section id="4.4.2">
+                        <h3>4.4.2 Circular Color Difference with MasterCard : Accuracy of trials across Sheets
+                        </h3>
+
+                        <img src="https://i.imghippo.com/files/4e6l91719183307.png" alt="" border="0">
+                    </section>
+
                 </article>
             </section>
+
+
+            </p>
+            <br>
+            </article>
+        </section>
         </section>
 
         <section id="Variance Calculation">
             <h2>5. Variance Calculation</h2>
             <article>
                 <p>
-                    all varianceof 13 sheets.
+                    all variance of 13 sheets.
                 </p>
             </article>
         </section>
