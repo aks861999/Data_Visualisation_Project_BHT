@@ -30,6 +30,9 @@
                 </li>
                 <li><a href="#Reshape_Data_for_Analysis">3.3 Reshape Data for Analysis</a></li>
                 <li><a href="#Create_Nested_Dictionaries">3.4 Create Nested Dictionaries</a></li>
+                <li><a href="#Create_Nested_Dictionaries">3.5 Data_Processing_Workflow</a></li>
+
+
 
 
 
@@ -37,6 +40,20 @@
                         of ΔE Values</a></li>
                 <ul id="subSectionList_visualization">
                     <li><a href="#Difference_Between_Two_Cards">4.1 Difference Between Two Cards</a></li>
+                    <li><a href="#Understanding_L,_a,_b">4.1.1 Understanding L, a, b</a></li>
+
+                    <li><a href="#Calculation_of_Color_Difference">4.1.2 Calculation of Color Difference</a></li>
+
+                    <li><a href="#Code_Explanation">4.1.3 Code Explanation</a></li>
+                    <li><a href="#Calculating_ΔE_for_Each_Block">4.1.4 Calculating ΔE for Each Block</a></li>
+                    <li><a href="#Visualization">4.1.5 Visualization</a></li>
+                    <li><a href="#The_Complete_Code_for_Visualisation">4.1.6 The Complete Code for Visualisation</a>
+                    </li>
+
+
+
+
+
                     <li><a href="#DeltaE_Heatmap">4.2 ΔE Heatmap</a></li>
                     <li><a href="#Ring_Map">4.3 Ring Map</a></li>
                 </ul>
@@ -79,6 +96,8 @@
                     <li>Analyzing color dispersion and consistency across sheets</li>
                     <li>Visualizing intended colors and measured colors</li>
                     <li>Calculating color differences (ΔE values)</li>
+                    <li> Variance Calculation</li>
+                    <li>Closest Cards to Mean Visualization</li>
                     <li>Analyzing Variance Across Sheets</li>
 
                 </ul>
@@ -228,29 +247,272 @@
 
                 </section>
 
+
+
+
+
+                <section id="Data_Processing_Workflow">
+
+                    <h3>3.5 Data_Processing_Workflow</h3>
+                    <footer>
+                        <img src="https://i.imghippo.com/files/lkkWf1719175736.jpg" alt="" border="0">
+                    </footer>
+
+
+                </section>
+
+
+
+
+
             </article>
         </section>
 
 
-        
+
         <section id="Visualization_DeltaE_Values">
             <h2>4. Visualization of ΔE Values</h2>
             <article>
 
                 <p>
-                    This section explains how to calculate the color difference (ΔE) between two 8x8 color cards using the given Python code and Visualise afterwards.
+                    This section explains how to calculate the color difference (ΔE) between two 8x8 color cards using
+                    the given Python code and Visualise afterwards.
                 </p>
             </article>
+
+            <br>
+
+
             <section id="Difference_Between_Two_Cards">
                 <h3>4.1 Difference Between Two Cards</h3>
                 <article>
-                    <p>
-                        Detailed explanation of the differences between two selected color cards using ΔE values.
-                    </p>
+
+
+
+
+
+
+
+
+
+                    <section id="Understanding_L,_a,_b">
+                        <h3> 4.1.1 Understanding L, a, b</h3>
+                        <ul>
+                            <h3><strong>
+                                    <li>L, a, b Color Space:</li>
+                                </strong></h3>
+                            <ul>
+                                <li>The L, a, b color space, also known as CIELAB, is a color space defined by the
+                                    International Commission on Illumination (CIE).</li>
+                                <li><strong>L</strong>: Lightness, ranging from 0 (black) to 100 (white).</li>
+                                <li><strong>a</strong>: Color component from green to red, where negative values
+                                    indicate green and positive values indicate red.</li>
+                                <li><strong>b</strong>: Color component from blue to yellow, where negative values
+                                    indicate blue and positive values indicate yellow.</li>
+                            </ul>
+                        </ul>
+                    </section>
+                    <section id="Calculation_of_Color_Difference">
+                        <h3>4.1.2. Calculation of Color Difference (ΔE)</h3>
+                        <ul>
+                            <h3>
+                                <li><strong>Purpose</strong>:</li>
+                            </h3>
+                            <ul>
+                                <li>ΔE quantifies the difference between two colors. It helps in comparing how similar
+                                    or different two colors are perceived.</li>
+                            </ul>
+                            <h3>
+                                <li><strong>Formula</strong>:</li>
+                            </h3>
+                            <ul>
+                                <li>The formula for calculating ΔE in the CIELAB color space is:</li>
+                                <pre><code>ΔE = sqrt((L_after - L_before)^2 + (a_after - a_before)^2 + (b_after - b_before)^2)</code></pre>
+                                <br>
+                                <li>This formula calculates the Euclidean distance between two points in the L, a, b
+                                    color space.</li>
+                            </ul>
+                        </ul>
+                    </section>
+
+                    <section id="Code_Explanation">
+                        <h3>4.1.3. Code Explanation</h3>
+                        <ul>
+                            <h3>
+                                <li><strong>Libraries Imported</strong>:</li>
+                            </h3>
+                            <ul>
+                                <li><code>numpy</code>: Used for numerical operations.</li>
+                                <li><code>matplotlib.pyplot</code>: Used for plotting the heatmap.</li>
+                                <li><code>seaborn</code>: Used for enhancing the heatmap visualization.</li>
+                            </ul>
+
+                            <h3>
+                                <li><strong>Function Definition</strong>:</li>
+                            </h3>
+                            <ul>
+                                <li><code>calculate_delta_e(L_before, a_before, b_before, L_after, a_after, b_after)</code>:
+                                    This function computes the ΔE value using the provided formula.</li>
+                            </ul>
+                            <h3>
+                                <li><strong>Data Preparation</strong>:</li>
+                            </h3>
+                            <ul>
+                                <li>Assume <code>color_card1</code> and <code>color_card2</code> are DataFrames
+                                    representing two color cards, each containing 64 rows (one for each color block)
+                                    with columns 'L', 'a', 'b'.</li>
+                            </ul>
+                            <h3>
+                                <li><strong>Delta E Matrix Initialization</strong>:</li>
+                            </h3>
+                            <ul>
+                                <li><code>delta_e_matrix = np.zeros((8, 8))</code>: Initializes an 8x8 matrix to store
+                                    ΔE values for each color block.</li>
+                            </ul>
+                            <h3>
+                                <li><strong>Extracting Color Blocks</strong>:</li>
+                            </h3>
+                            <ul>
+                                <li><code>color_card1 = sheets['12']['0']</code> and
+                                    <code>color_card2 = sheets['12']['1']</code>: Extracts the DataFrames for the two
+                                    color cards to be compared.
+                                </li>
+                            </ul>
+                        </ul>
+                    </section>
+
+
+
+
+
+                    <section id="Calculating_ΔE_for_Each_Block">
+                        <h3>4.1.4. Calculating ΔE for Each Block</h3>
+                        <ul>
+                            <h3>
+                                <li><strong>Loop Through Blocks</strong>:</li>
+                            </h3>
+                            <ul>
+                                <li>The nested for loops iterate over each block in the 8x8 grid:</li>
+                                <pre><code>for i in range(8):
+                    for j in range(8):</code></pre>
+
+
+                                <h3>
+                                    <li><strong>Extract Color Values</strong>:</li>
+                                </h3>
+                                <ul>
+                                    <li>For each block <code>(i, j)</code>, extract the L, a, b values from
+                                        <code>color_card1</code> and <code>color_card2</code>:
+                                    </li>
+                                    <pre><code>color_block1 = color_card1.iloc[8*i + j]
+                    color_block2 = color_card2.iloc[8*i + j]
+                    L_before, a_before, b_before = color_block1['L'], color_block1['a'], color_block1['b']
+                    L_after, a_after, b_after = color_block2['L'], color_block2['a'], color_block2['b']</code></pre>
+                                </ul>
+
+
+                                <h3>
+                                    <li><strong>Calculate ΔE</strong>:</li>
+                                </h3>
+                                <ul>
+                                    <li>Use the <code>calculate_delta_e</code> function to compute the color difference
+                                        for each block and store it in the <code>delta_e_matrix</code>:</li>
+                                    <pre><code>delta_e_matrix[i, j] = calculate_delta_e(L_before, a_before, b_before, L_after, a_after, b_after)</code></pre>
+                                </ul>
+                            </ul>
+                        </ul>
+                    </section>
+
+
+
+
+
+
+                    <section id="Visualization">
+                        <h3>4.1.5. Visualization</h3>
+                        <ul>
+                            <h3>
+                                <li><strong>Heatmap</strong>:</li>
+                            </h3>
+                            <ul>
+                                <li><code>sns.heatmap(delta_e_matrix, cmap='hot', annot=True)</code>: Plots a heatmap of
+                                    the ΔE values, using a hot color map for visualization and annotating each cell with
+                                    the ΔE value.</li>
+                                <li><code>plt.title('Color Difference Between Two Color Cards')</code>: Adds a title to
+                                    the heatmap.</li>
+                                <li><code>plt.show()</code>: Displays the heatmap.</li>
+                            </ul>
+                        </ul>
+                    </section>
+
+                    <section id="The_Complete_Code_for_Visualisation">
+                        <h3>4.1.6. The Complete Code for visualisation</h3>
+                        <ul>
+                            <li>The provided code effectively calculates and visualizes the color difference (ΔE)
+                                between two 8x8 color cards by iterating through each color block, computing the ΔE for
+                                each pair of corresponding blocks, and displaying the results in a heatmap.</li>
+                        </ul>
+                    </section>
+
+
+                    <pre><code>
+                    import numpy as np
+                    import matplotlib.pyplot as plt
+                    import seaborn as sns
+
+                    def calculate_delta_e(L_before, a_before, b_before, L_after, a_after, b_after):
+                    delta_e = np.sqrt((L_after - L_before)**2 + (a_after - a_before)**2 + (b_after - b_before)**2)
+                    return delta_e
+
+                    # Assuming color_card1 and color_card2 are your two color cards
+                    # Each color card is a DataFrame with 64 rows and columns 'L', 'a', 'b'
+
+                    delta_e_matrix = np.zeros((8, 8))
+
+                    color_card1 = sheets['12']['0']
+                    color_card2 = sheets['12']['1']
+
+                    for i in range(8):
+                    for j in range(8):
+                        color_block1 = color_card1.iloc[8*i + j]
+                        color_block2 = color_card2.iloc[8*i + j]
+                        L_before, a_before, b_before = color_block1['L'], color_block1['a'], color_block1['b']
+                        L_after, a_after, b_after = color_block2['L'], color_block2['a'], color_block2['b']
+                        delta_e_matrix[i, j] = calculate_delta_e(L_before, a_before, b_before, L_after, a_after, b_after)
+
+                    sns.heatmap(delta_e_matrix, cmap='hot', annot=True)
+                    plt.title('Color Difference Between Two Color Cards')
+                    plt.show()
+                    </code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 </article>
             </section>
 
-            
+
+
+
+
+
+
+
             <section id="DeltaE_Heatmap">
                 <h3>4.2 ΔE Heatmap</h3>
                 <article>
@@ -291,21 +553,16 @@
             <h2>6. Closest Cards to Mean Visualization</h2>
             <article>
                 <p>
-                    By calculating the distances of the closest color cards to the mean color values for each sheet, we
-                    can observe the level of uniformity and variation within each sheet. A bar chart is created where
-                    each bar represents a sheet, with the height of the bar indicating the distance of the closest color
-                    card to the mean color value for that sheet. Random colors are generated for each sheet to make the
-                    bars visually distinct.Variance Calculation
+                    The code calculates average L*a*b values for each row of cards on every sheet. It then finds the
+                    card on each sheet that is closest in color to this average to measure the color difference.
+                    Additionally, it compares the average color of a "master" card to the averages of all sheets,
+                    identifying which sheet's colors are most similar to the master. The results show which card on each
+                    sheet matches its average color best and which sheet overall is closest to the master standard.
                 </p>
                 <p>
-                    This bar chart provides a clear visual comparison of color consistency across different sheets. Each
-                    bar represents a specific sheet, with its height showing the distance to the mean color value. Lower
-                    bars indicate higher color consistency within that sheet. Sheets with shorter bars have color cards
-                    that are very close to the mean, indicating better consistency. For instance, Sheet 2 has the
-                    shortest bar, suggesting it has the most uniform color distribution. Conversely, sheets with taller
-                    bars, like Sheet 6, show greater variability, indicating less color consistency.
-                    By examining this chart, we can quickly identify which sheets maintain high color consistency and
-                    which ones show significant variation.
+                    To visualize the results, a bar chart is used where each bar represents a sheet. Shorter bars
+                    indicate that the cards on that sheet closely match its average color,showing higher color
+                    consistency.
                 </p>
             </article>
         </section>
