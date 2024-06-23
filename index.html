@@ -7,17 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Color Measurements of Douglas Color Cards</title>
     <link rel="stylesheet" href="style.css" />
-    <style>
-        /* Hide the subsections initially */
-        #MasterColorCard_Conversion_and_Visualization,
-        #LabMeasurements_ColorCard_and_Visualization,
-        #Color_Dispersion_Across_Sheets,
-        #Difference_Between_Two_Cards,
-        #DeltaE_Heatmap,
-        #Ring_Map {
-            display: none;
-        }
-    </style>
+    
 </head>
 
 <body>
@@ -26,14 +16,17 @@
             <h1>Color Measurements of Douglas Color Cards</h1>
             <ul>
                 <li><a href="#Introduction">1. Introduction</a></li>
-               <li><a href="#Description_of_Data" onclick="toggleSubSections('data')">2. Description of Data</a></li>
+                <li><a href="#Description_of_Data" onclick="toggleSubSections('data')">2. Description of Data</a></li>
                 <ul id="subSectionList_data">
-                    <li><a href="#MasterColorCard_Conversion_and_Visualization">2.1 MasterColorCard Conversion and Visualization</a></li>
-                    <li><a href="#LabMeasurements_ColorCard_and_Visualization">2.2 LabMeasurements ColorCard Visualization</a></li>
+                    <li><a href="#MasterColorCard_Conversion_and_Visualization">2.1 MasterColorCard Conversion and
+                            Visualization</a></li>
+                    <li><a href="#LabMeasurements_ColorCard_and_Visualization">2.2 LabMeasurements ColorCard
+                            Visualization</a></li>
                     <li><a href="#Color_Dispersion_Across_Sheets">2.3 Color Dispersion Across Sheets</a></li>
                 </ul>
                 <li><a href="#Data_Preprocessing">3. Data Preprocessing</a></li>
-                <li><a href="#Visualization_DeltaE_Values" onclick="toggleSubSections('visualization')">4. Visualization of ΔE Values</a></li>
+                <li><a href="#Visualization_DeltaE_Values" onclick="toggleSubSections('visualization')">4. Visualization
+                        of ΔE Values</a></li>
                 <ul id="subSectionList_visualization">
                     <li><a href="#Difference_Between_Two_Cards">4.1 Difference Between Two Cards</a></li>
                     <li><a href="#DeltaE_Heatmap">4.2 ΔE Heatmap</a></li>
@@ -48,11 +41,16 @@
             <h2>1. Introduction</h2>
             <article>
                 <p>
-                    In this project, we analyze the color measurements of prints of Douglas color cards. The primary goal is to assess the consistency of color prints relative to the intended color values and explore color dispersion.
-                    The MasterColorCard file consists of Field (No., 1 to 64), for a single color card and Crow, Ccol (1 to 8 each, for the position on a single color card).
+                    In this project, we analyze the color measurements of prints of Douglas color cards. The primary
+                    goal is to assess the consistency of color prints relative to the intended color values and explore
+                    color dispersion.
+                    The MasterColorCard file consists of Field (No., 1 to 64), for a single color card and Crow, Ccol (1
+                    to 8 each, for the position on a single color card).
                 </p>
-                <p>The LabMeasurements-Color-Card consists of color measurements for 42 color cards printed on one large sheet with 7 rows and 6 columns.
-                    each color card has 64 color spots. The data source has thirteen of the large sheets which is 42*13 color cards.
+                <p>The LabMeasurements-Color-Card consists of color measurements for 42 color cards printed on one large
+                    sheet with 7 rows and 6 columns.
+                    each color card has 64 color spots. The data source has thirteen of the large sheets which is 42*13
+                    color cards.
                 </p>
                 <p>We will visualize the data to understand:</p>
                 <ul>
@@ -86,9 +84,13 @@
                 <h3>2.1 MasterColorCard Conversion and Visualization</h3>
                 <article>
                     <p>We explored the MasterColorCard, a collection of colors, to understand its wide range of colors.
-                        The MasterColorCard uses the L*a*b color space, which is great for describing how similar colors look to the human eye. However, to view these colors on digital screens, we need to convert them to the RGB color space, which is the standard format for screens.
-                        By converting from L*a*b to RGB, we were able to accurately display the colors in our dataset for visualization.
-                        After converting the colors, we visualized them using a scatter plot, where each color is represented by a square or a circle.</p>
+                        The MasterColorCard uses the L*a*b color space, which is great for describing how similar colors
+                        look to the human eye. However, to view these colors on digital screens, we need to convert them
+                        to the RGB color space, which is the standard format for screens.
+                        By converting from L*a*b to RGB, we were able to accurately display the colors in our dataset
+                        for visualization.
+                        After converting the colors, we visualized them using a scatter plot, where each color is
+                        represented by a square or a circle.</p>
                 </article>
             </section>
             <footer>
@@ -106,18 +108,96 @@
                 <h3>2.3 Color Dispersion Across Sheets</h3>
                 <article>
                     <p>
-                        This visualization aims to analyze and compare the color consistency across a dataset comprising 13 sheets, each containing 64 spots of color cards. The ΔE values for these spots have been computed to represent the color differences in the Lab color space. A lower ΔE value signifies higher color consistency, while a higher ΔE value indicates significant color variation.
-                        The 'inferno' colormap is used to highlight variations in color differences. The color intensity in the plot reflects the magnitude of these differences, with brighter spots indicating higher ΔE values and greater color deviation.
+                        This visualization aims to analyze and compare the color consistency across a dataset comprising
+                        13 sheets, each containing 64 spots of color cards. The ΔE values for these spots have been
+                        computed to represent the color differences in the Lab color space. A lower ΔE value signifies
+                        higher color consistency, while a higher ΔE value indicates significant color variation.
+                        The 'inferno' colormap is used to highlight variations in color differences. The color intensity
+                        in the plot reflects the magnitude of these differences, with brighter spots indicating higher
+                        ΔE values and greater color deviation.
                     </p>
                 </article>
             </section>
             <footer>
-                <img src="https://i.ibb.co/VYYmk4c/Whats-App-Image-2024-06-22-at-21-46-30.jpg" alt="Whats-App-Image-2024-06-22-at-21-46-30" />
+                <img src="https://i.ibb.co/12Hm93z/colrdispersion.jpg" alt="colrdispersion" />
             </footer>
         </section>
         <section id="Data_Preprocessing">
             <h2>3. Data Preprocessing</h2>
             <article>
+
+
+                <h3>Data Loading and Initialization</h3>
+                <ul>
+                    <li>Read and import the lab measurement data from the CSV file.
+                        <pre><code>df_lab = pd.read_csv("LabMeasurements-Color-Card.csv",sep=';', decimal=',') </code></pre>
+                    </li>
+                    <li>Initialize the dictionary to store data for each sheet.
+                        <pre><code>sheets = {} </code> </pre>
+                    </li>
+                </ul>
+
+                <h3>Sheet Data Extraction and Concatenation</h3>
+                <ul>
+                    <li>Iterate through each sheet to extract relevant data based on rows and columns.</li>
+                    <li>Concatenate selected data into a comprehensive DataFrame for each sheet.
+                        <pre><code>new_df = pd.concat(sheet_1, axis=1).T.reset_index(drop=True)</code></pre>
+                    </li>
+                </ul>
+
+                <h3>Reshape Data for Analysis</h3>
+                <ul>
+                    <li>Extracting and reshaping to prepare for structured storage.
+                        <pre><code>
+                    for index, row in test_df.iterrows():
+                        # Iterate over each 8x8 block in the row
+                        for i in range(1, 9):
+                            for j in range(1, 9):
+                                # Extract the L, a, b values for the block
+                                L = row[f'L{i}{j}']
+                                a = row[f'a{i}{j}']
+                                b = row[f'b{i}{j}']
+
+                                # Append the values to the reshaped data
+                                reshaped_data.append({
+                                    'row': initial_row,
+                                    'column': initial_column,
+                                    'L': L,
+                                    'a': a,
+                                    'b': b
+                                })</code></pre>
+                    </li>
+                    <li>Creating <code>reshaped_df</code> to organize color card data into a structured format.</li>
+                </ul>
+
+                <h3>Creating Nested Dictionaries</h3>
+                <ul>
+                    <li>Building nested dictionaries (<code>sheets</code>) where each sheet number serves as a key.</li>
+                    <li>Populating <code>list_of_cards</code> dictionaries within each sheet to store color card data
+                        (<code>reshaped_df</code>).</li>
+                </ul>
+
+                <h2>Implementation and Output</h2>
+                <ul>
+                    <li>Implementing the described logic using Python and Pandas.</li>
+                    <li>Printing current sheet numbers during the execution for tracking progress.</li>
+                </ul>
+
+                <h2>Conclusion</h2>
+                <ul>
+                    <li>Summary of the achieved data structure transformation.</li>
+                    <li>Overview of the hierarchical organization for efficient data retrieval and manipulation.</li>
+                </ul>
+
+
+
+
+
+
+
+
+
+
 
             </article>
         </section>
@@ -137,14 +217,20 @@
                 <h3>4.2 ΔE Heatmap</h3>
                 <article>
                     <p>
-                       This plot shows us how closely the printed colors match the intended colors.Iterates through each sheet and card, compares the measured colors with the intended colors, and calculates the ΔE values. it can be plot for any sheets but The heatmap visualizes these ΔE values for Sheet 0, Card 0 . Each cell in the heatmap represents a spot on the color card, with the color indicating the magnitude of the ΔE value. The 'coolwarm' colormap is used, where cooler colors (blue) represent lower ΔE values (higher consistency) and warmer colors (red) signify higher ΔE values (greater variation).
+                        This plot shows us how closely the printed colors match the intended colors.Iterates through
+                        each sheet and card, compares the measured colors with the intended colors, and calculates the
+                        ΔE values. it can be plot for any sheets but The heatmap visualizes these ΔE values for Sheet 0,
+                        Card 0 . Each cell in the heatmap represents a spot on the color card, with the color indicating
+                        the magnitude of the ΔE value. The 'coolwarm' colormap is used, where cooler colors (blue)
+                        represent lower ΔE values (higher consistency) and warmer colors (red) signify higher ΔE values
+                        (greater variation).
                     </p>
                 </article>
-                </section>
-                <footer>
-                    <img src="https://i.ibb.co/D4ygvZY/Hotmap.jpg" alt="Hotmap" />
-                </footer>
-                
+            </section>
+            <footer>
+                <img src="https://i.ibb.co/D4ygvZY/Hotmap.jpg" alt="Hotmap" />
+            </footer>
+
             <section id="Ring_Map">
                 <h3>4.3 Ring Map</h3>
                 <article>
@@ -158,56 +244,30 @@
             <h2>6. Closest Cards to Mean Visualization</h2>
             <article>
                 <p>
-                    By calculating the distances of the closest color cards to the mean color values for each sheet, we can observe the level of uniformity and variation within each sheet. A bar chart is created where each bar represents a sheet, with the height of the bar indicating the distance of the closest color card to the mean color value for that sheet. Random colors are generated for each sheet to make the bars visually distinct.
+                    By calculating the distances of the closest color cards to the mean color values for each sheet, we
+                    can observe the level of uniformity and variation within each sheet. A bar chart is created where
+                    each bar represents a sheet, with the height of the bar indicating the distance of the closest color
+                    card to the mean color value for that sheet. Random colors are generated for each sheet to make the
+                    bars visually distinct.
                 </p>
                 <p>
-                    This bar chart provides a clear visual comparison of color consistency across different sheets. Each bar represents a specific sheet, with its height showing the distance to the mean color value. Lower bars indicate higher color consistency within that sheet. Sheets with shorter bars have color cards that are very close to the mean, indicating better consistency. For instance, Sheet 2 has the shortest bar, suggesting it has the most uniform color distribution. Conversely, sheets with taller bars, like Sheet 6, show greater variability, indicating less color consistency.
-                    By examining this chart, we can quickly identify which sheets maintain high color consistency and which ones show significant variation.
+                    This bar chart provides a clear visual comparison of color consistency across different sheets. Each
+                    bar represents a specific sheet, with its height showing the distance to the mean color value. Lower
+                    bars indicate higher color consistency within that sheet. Sheets with shorter bars have color cards
+                    that are very close to the mean, indicating better consistency. For instance, Sheet 2 has the
+                    shortest bar, suggesting it has the most uniform color distribution. Conversely, sheets with taller
+                    bars, like Sheet 6, show greater variability, indicating less color consistency.
+                    By examining this chart, we can quickly identify which sheets maintain high color consistency and
+                    which ones show significant variation.
                 </p>
             </article>
             <footer>
-                <img src="https://i.ibb.co/WD1FPb6/Whats-App-Image-2024-06-22-at-22-34-04.jpg" alt="Whats-App-Image-2024-06-22-at-22-34-04" />
+                <img src="https://i.ibb.co/7QJGPGk/colord-Histogram.jpg" alt="colord-Histogram" />
+                
             </footer>
         </section>
     </main>
-    <script>
-        function toggleSubSections(type) {
-            var subSectionList_data = document.getElementById('subSectionList_data');
-            var subSectionList_visualization = document.getElementById('subSectionList_visualization');
-            var masterColorCard = document.getElementById('MasterColorCard_Conversion_and_Visualization');
-            var LabMeasurements = document.getElementById('LabMeasurements_ColorCard_and_Visualization');
-            var analysisVisualizationColorData = document.getElementById('Color_Dispersion_Across_Sheets');
-            var differenceBetweenTwoCards = document.getElementById('Difference_Between_Two_Cards');
-            var deltaEHeatmap = document.getElementById('DeltaE_Heatmap');
-            var ringMap = document.getElementById('Ring_Map');
-
-            if (type === 'data') {
-                if (masterColorCard.style.display === 'none') {
-                    masterColorCard.style.display = 'block';
-                    LabMeasurements.style.display = 'block';
-                    analysisVisualizationColorData.style.display = 'block';
-                    subSectionList_data.style.display = 'block';
-                } else {
-                    masterColorCard.style.display = 'none';
-                    LabMeasurements.style.display = 'none';
-                    analysisVisualizationColorData.style.display = 'none';
-                    subSectionList_data.style.display = 'none';
-                }
-            } else if (type === 'visualization') {
-                if (differenceBetweenTwoCards.style.display === 'none') {
-                    differenceBetweenTwoCards.style.display = 'block';
-                    deltaEHeatmap.style.display = 'block';
-                    ringMap.style.display = 'block';
-                    subSectionList_visualization.style.display = 'block';
-                } else {
-                    differenceBetweenTwoCards.style.display = 'none';
-                    deltaEHeatmap.style.display = 'none';
-                    ringMap.style.display = 'none';
-                    subSectionList_visualization.style.display = 'none';
-                }
-            }
-        }
-    </script>
+    
 </body>
 
 </html>
