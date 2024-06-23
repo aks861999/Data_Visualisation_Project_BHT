@@ -78,6 +78,13 @@ section h2 {
   margin-bottom: 20px;
 }
 
+
+section h3 {
+  font-size: 15px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
 section article {
   margin-left: 10px;
   display: flex;
@@ -94,7 +101,8 @@ section article ul li {
 }
 
 section article p {
-  font-size: 20px; /* Increased font size */
+  font-size: 20px;
+  /* Increased font size */
   line-height: 1.6;
 }
 
