@@ -91,6 +91,7 @@
                     <li><a href="#5.2">5.2 Find the Sheet with minimum Variance</a></li>
                     <li><a href="#5.3">5.3 Normalised Efficiency Distribution of 42 Cards from Sheet 6 with
                             MasterCard</a></li>
+                    <li><a href="#5.4">5.4 Heatmap Visualisation of Accuracy of trials in Sheet No. 6</a></li>
                 </ul>
             </ul>
             <ul>
@@ -747,8 +748,8 @@
                                     These visualizations help in understanding how closely each trial card matches the
                                     master card, aiding in evaluating experimental outcomes efficiently.
                                 </p>
-                                <img src="https://i.imghippo.com/files/qSVcl1719183247.png" alt="Image" width="700"
-                                    height="auto" class="center">
+                                <img src="https://i.imghippo.com/files/qSVcl1719183247.png" alt="Image" width="5000"
+                                    height="auto">
 
                                 <h3><strong>The Code Snippet </strong></h3>
                                 <pre><code>
@@ -798,7 +799,7 @@
                                 </p>
 
                                 <img src="https://i.imghippo.com/files/4e6l91719183307.png" alt="Image" width="1200"
-                                    height="auto" class="center">
+                                    height="auto">
                                 <h3><strong>The Code Snippet </strong></h3>
                                 <pre><code>
     # Iterate through each sheet to plot minimum delta E cards
@@ -1008,7 +1009,61 @@ for i in range(8):
                 </section>
 
 
+                <section id="5.4">
+                    <h3>5.4 Heatmap Visualisation of Accuracy of trials in Sheet No. 6</h3>
 
+                    <h3>The Purpose of Heatmap Visualisation to find acurracies of each 42 cards</h3>
+                    <p>
+                        This part compares color differences between a master color card and multiple trial color cards
+                        in a specific sheet. It calculates the differences for each color block in an 8x8 grid using the
+                        Delta E formula, which measures the Euclidean distance between color values. Each trial card's
+                        differences are visualized as heatmaps, highlighting the accuracy of the trials compared to the
+                        master card. The heatmaps for all cards in the sheet are plotted together, with a color bar
+                        indicating the magnitude of color differences, providing a clear visual representation of how
+                        closely each trial card matches the master card.
+                    </p>
+
+                    <pre><code>
+    def plot_heatmaps_for_sheet(sheet, master_card):
+    fig, axes = plt.subplots(6, 7, figsize=(21, 18))
+    axes = axes.flatten()
+    max_delta_e = 0
+    for idx, card_id in enumerate(sheet):
+        delta_e_matrix = np.zeros((8, 8))
+        color_card = sheet[card_id]
+        for i in range(8):
+            for j in range(8):
+                color_block_master = master_card.iloc[8*i + j]
+                color_block_card = color_card.iloc[8*i + j]
+                L_before, a_before, b_before = color_block_master['L'], color_block_master['a'], color_block_master['b']
+                L_after, a_after, b_after = color_block_card['L'], color_block_card['a'], color_block_card['b']
+                delta_e_matrix[i, j] = calculate_delta_e(L_before, a_before, b_before, L_after, a_after, b_after)
+                if delta_e_matrix[i, j] > max_delta_e:
+                    max_delta_e = delta_e_matrix[i, j]
+        sns.heatmap(delta_e_matrix, cmap='hot', cbar=False, ax=axes[idx], annot=False, vmin=0, vmax=max_delta_e)
+        axes[idx].invert_yaxis()  # Invert the y-axis
+
+        axes[idx].set_title(f'Card {card_id}')
+        axes[idx].axis('off')
+
+    # Add a colorbar below the plot
+    cbar_ax = fig.add_axes([0.3, 0.02, 0.4, 0.02])  # Position: left, bottom, width, height
+    norm = plt.Normalize(vmin=0, vmax=max_delta_e)
+    sm = plt.cm.ScalarMappable(cmap='hot', norm=norm)
+    sm.set_array([])
+    fig.colorbar(sm, cax=cbar_ax, orientation='horizontal', label='Color Difference (ΔE)')
+    plt.suptitle("Accuracy of trials in Sheet No. 6", fontsize=25, y=1)
+    plt.tight_layout(rect=[0, 0.05, 1, 1])
+    plt.show()
+</code></pre>
+
+                    <h3>Heatmap Visualisation of Acurracy</h3>
+                    <img src="https://i.imghippo.com/files/wZDSO1719190452.png" alt="Image" width="1200" height="auto">
+
+
+
+
+                </section>
 
 
 
