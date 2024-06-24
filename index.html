@@ -20,9 +20,7 @@
                 <ul id="subSectionList_data">
                     <li><a href="#MasterColorCard_Conversion_and_Visualization">2.1 MasterColorCard Conversion and
                             Visualization</a></li>
-                    <li><a href="#LabMeasurements_ColorCard_and_Visualization">2.2 LabMeasurements ColorCard
-                            Visualization</a></li>
-                    <li><a href="#Color_Dispersion_Across_Sheets">2.3 Color Dispersion Across Sheets</a></li>
+                    <li><a href="#Color_Dispersion_Across_Sheets">2.2 Color Dispersion Across Sheets</a></li>
                 </ul>
                 <li><a href="#Data_Preprocessing">3. Data Preprocessing</a></li>
 
@@ -181,16 +179,8 @@
             <footer>
                 <img src="https://i.ibb.co/8Yvp52d/p2.jpg" alt="p2" />
             </footer>
-            <section id="LabMeasurements_ColorCard_and_Visualization">
-                <h3>2.2 LabMeasurements ColorCard Visualization</h3>
-                <article>
-                    <p>
-                        Minimised version of LabMeasurements card
-                    </p>
-                </article>
-            </section>
             <section id="Color_Dispersion_Across_Sheets">
-                <h3>2.3 Color Dispersion Across Sheets</h3>
+                <h3>2.2 Color Dispersion Across Sheets</h3>
                 <article>
                     <p>
                         This visualization aims to analyze and compare the color consistency across a dataset comprising
@@ -1259,14 +1249,31 @@ print(f"The card closest to the mean in sheet '6' is card '{closest_card + 1}' w
                     <br>
                     <h3>The intution behind plot</h3>
                     <p>
-                        In the following plot, del E is being calculated for the Card 23 from Sheet 6 with MasterCard. Now as an observer may be intersted to know huw intensely, each color square differ from each other, so for that intensity of delta E has been calculated and visualised in the rectangle, background of the Overlapped Circular Blocks, where left one is the from card 23 from Sheet 6 and right one is the MasterCard. This gives an idea of the most accurate color square out of 64 squares.
+                        In the following plot, del E is being calculated for the Card 23 from Sheet 6 with MasterCard.
+                        Now as an observer may be intersted to know huw intensely, each color square differ from each
+                        other, so for that intensity of delta E has been calculated and visualised in the rectangle,
+                        background of the Overlapped Circular Blocks, where left one is the from card 23 from Sheet 6
+                        and right one is the MasterCard. This gives an idea of the most accurate color square out of 64
+                        squares.
                     </p>
                     <img src="https://i.imghippo.com/files/MO5Fs1719194794.png" alt="" border="0">
 
                     <br>
                     <h3> Explanation </h3>
                     <p>
-                        The plot visualizes the color differences between "Card 23" from "Sheet 6" and the reference "MasterCard." It uses background intensity and color overlays to highlight discrepancies. The intensity of each cell's background is based on the color difference, calculated using Euclidean distance in the L*, a*, b* color space, and normalized to a maximum value of 100. This grayscale background, where darker shades indicate higher color differences, provides a clear indication of color variance. Overlaid on each cell are two circles representing the actual colors from the ideal card and the MasterCard, with colors converted from L*, a*, b* values to RGB for accurate visualization. The gridlines enhance the clarity of individual sections, and a color bar labeled "Color Difference Intensity" offers a reference scale. The Y-axis is inverted for standard visual orientation. This combined approach of intensity mapping and color overlays offers a comprehensive view of color discrepancies, crucial for quality control in color-critical applications. The plot effectively identifies areas of significant color variance, aiding in a detailed analysis of color accuracy between the cards.
+                        The plot visualizes the color differences between "Card 23" from "Sheet 6" and the reference
+                        "MasterCard." It uses background intensity and color overlays to highlight discrepancies. The
+                        intensity of each cell's background is based on the color difference, calculated using Euclidean
+                        distance in the L*, a*, b* color space, and normalized to a maximum value of 100. This grayscale
+                        background, where darker shades indicate higher color differences, provides a clear indication
+                        of color variance. Overlaid on each cell are two circles representing the actual colors from the
+                        ideal card and the MasterCard, with colors converted from L*, a*, b* values to RGB for accurate
+                        visualization. The gridlines enhance the clarity of individual sections, and a color bar labeled
+                        "Color Difference Intensity" offers a reference scale. The Y-axis is inverted for standard
+                        visual orientation. This combined approach of intensity mapping and color overlays offers a
+                        comprehensive view of color discrepancies, crucial for quality control in color-critical
+                        applications. The plot effectively identifies areas of significant color variance, aiding in a
+                        detailed analysis of color accuracy between the cards.
                     </p>
                 </section>
 
