@@ -1021,8 +1021,14 @@ for i in range(8):
                         master card. The heatmaps for all cards in the sheet are plotted together, with a color bar
                         indicating the magnitude of color differences, providing a clear visual representation of how
                         closely each trial card matches the master card.
-                    </p>
+<br><br>
+                        Again it is worth to note that the sqaure at the position (6,2) has largest del E, these signify
+                        that this is square is the significantly of different color than MasterCard's square at the same
+                        position.
 
+                    </p>
+                    <br>
+                    <h3>Code</h3>
                     <pre><code>
     def plot_heatmaps_for_sheet(sheet, master_card):
     fig, axes = plt.subplots(6, 7, figsize=(21, 18))
@@ -1056,7 +1062,7 @@ for i in range(8):
     plt.tight_layout(rect=[0, 0.05, 1, 1])
     plt.show()
 </code></pre>
-
+                    <br>
                     <h3>Heatmap Visualisation of Acurracy</h3>
                     <img src="https://i.imghippo.com/files/wZDSO1719190452.png" alt="Image" width="1200" height="auto">
 
