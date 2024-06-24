@@ -95,8 +95,24 @@
                 </ul>
             </ul>
             <ul>
-                <li><a href="#Closest_Cards_to_Mean_Visualization">6. Closest Cards to Mean Visualization</a></li>
+                <li><a href="#6">6. Find the Card most likely to be Mean Card from most consistent Trial Sheet - 6</a>
+                </li>
+                <ul>
+                    <li><a href="#6.1">6.1 Step - 1 : Calculate the Mean of Sheet-6 </a></li>
+                    <li><a href="#6.2">6.2 Step - 2 : Find the Card closest to the Mean of Sheet-6 </a></li>
+
+                    <li><a href="#6.3">6.3 Visualise the Card 23 from Sheet 6 || The Most likely to Be Mean from the
+                            most Consistent Sheet</a></li>
+                    <li><a href="#6.4">6.4 Visualise Circular Difference between the Card 23 from Sheet 6 with
+                            MasterCard </a></li>
+
+
+
+                    <li><a href="#Closest_Cards_to_Mean_Visualization">6.5 Closest Cards to Mean Visualization</a></li>
+                </ul>
             </ul>
+
+
             <ul>
                 <li><a href="#Conclusion">7. Conclusion</a></li>
             </ul>
@@ -1021,7 +1037,7 @@ for i in range(8):
                         master card. The heatmaps for all cards in the sheet are plotted together, with a color bar
                         indicating the magnitude of color differences, providing a clear visual representation of how
                         closely each trial card matches the master card.
-<br><br>
+                        <br><br>
                         Again it is worth to note that the sqaure at the position (6,2) has largest del E, these signify
                         that this is square is the significantly of different color than MasterCard's square at the same
                         position.
@@ -1103,27 +1119,197 @@ for i in range(8):
 
 
 
-
-        <section id="Closest_Cards_to_Mean_Visualization">
-            <h2>6. Closest Cards to Mean Visualization</h2>
+        <section id="#6">
+            <h2>6. Find the Card most likely to be Mean Card from most consistent Trial Sheet - 6</h2>
             <article>
+
+
                 <p>
-                    The code calculates average L*a*b values for each row of cards on every sheet. It then finds the
-                    card on each sheet that is closest in color to this average to measure the color difference.
-                    Additionally, it compares the average color of a "master" card to the averages of all sheets,
-                    identifying which sheet's colors are most similar to the master. The results show which card on each
-                    sheet matches its average color best and which sheet overall is closest to the master standard.
+                    In this section we want to further narrow down out approac. Out of sheet number 6, We want to find
+                    the
+                    card that has the (L,a,b) values as close as as possible to the Mean Card. This is done by
+                    calculating
+                    the Euclidian distance between the (L,a,b) values of the Mean Card and the (L,a,b) values of each 42
+                    card in the sheet. The card with the smallest distance is the most likely to be the Mean Card with
+                    Mean
+                    dataframe of (L,a,b) values across (8*8) = 64 Squares.
+
                 </p>
-                <p>
-                    To visualize the results, a bar chart is used where each bar represents a sheet. Shorter bars
-                    indicate that the cards on that sheet closely match its average color,showing higher color
-                    consistency.
-                </p>
+
+                <section id="6.1">
+                    <h3>6.1. Step - 1 : Calculate the Mean of Sheet-6 </h3>
+
+                    <p>
+                        This step calculates the average color values (L*, a*, and b*) for each of the 64 color blocks
+                        across all color cards in a sheet. It iterates through each card in the sheet, extracting the
+                        L*,
+                        a*, and b* values for all blocks and appending these values to the respective lists. Once all
+                        values
+                        are collected, the function stacks these lists horizontally, effectively organizing all L*, a*,
+                        and
+                        b* values for each block into columns. It then computes the average of these values for each
+                        block.
+                        Finally, the function creates a new table (DataFrame) containing the average L*, a*, and b*
+                        values
+                        for each of the 64 color blocks and returns this table, providing a comprehensive overview of
+                        the
+                        average color properties for the sheet.
+                    </p>
+
+                    <h3>Code</h3>
+                    <pre><code>
+    # Function to calculate mean L*, a*, b* values for each of the 64 rows across all cards in a sheet
+    def calculate_mean_for_sheet(sheet):
+        # Initialize lists to store the L, a, b values for each row
+        L_values = []
+        a_values = []
+        b_values = []
+
+        # Loop through each card in the sheet and extract the L, a, b columns
+        for card in sheet.values():
+            L_values.append(card['L'].values)
+            a_values.append(card['a'].values)
+            b_values.append(card['b'].values)
+
+        # Stack the values horizontally and calculate the mean for each row
+        L_values = np.stack(L_values, axis=1)
+        a_values = np.stack(a_values, axis=1)
+        b_values = np.stack(b_values, axis=1)
+
+        L_mean = np.mean(L_values, axis=1)
+        a_mean = np.mean(a_values, axis=1)
+        b_mean = np.mean(b_values, axis=1)
+
+        # Create a DataFrame to store the mean values
+        mean_df = pd.DataFrame({
+            'L': L_mean,
+            'a': a_mean,
+            'b': b_mean
+        })
+
+        return mean_df
+</code></pre>
+
+                </section>
+
+
+                <section id="6.2">
+                    <h3>6.2. Step - 2 : Find the Card closest to the Mean of Sheet-6 </h3>
+                    <p>
+                        This stepidentifies the color card that is closest to the average color values in sheet '6'. It
+                        iterates through each card in the sheet and calculates the distance between the card's color
+                        values
+                        and the average color values for the sheet. This distance is measured using a pre-defined
+                        method.
+                        During this process, the code keeps track of the card that has the smallest distance to the
+                        average.
+                        After comparing all the cards, the code determines which card is closest to the mean color
+                        values
+                        and outputs the identifier of this card along with the distance. This helps in identifying the
+                        card
+                        that best represents the average color properties of the sheet.
+                    </p>
+
+                    <h3>Code</h3>
+                    <pre><code>
+for card_id, card in sheets['5'].items():
+  # Calculate the distance to the mean DataFrame
+  distance = calculate_distance(card[['L', 'a', 'b']], mean_df_sheet_5)
+
+  # Update the closest card if the current distance is smaller
+  if distance < min_distance:
+      min_distance = distance
+      closest_card = card_id
+
+print(f"The card closest to the mean in sheet '6' is card '{closest_card + 1}' with a distance of {min_distance:.4f}")
+</code></pre>
+
+                    <h3>Output</h3>
+
+                    <pre><code>
+    The card closest to the mean in sheet '6' is card '23' with a distance of 0.4511
+
+</code></pre>
+
+                </section>
+
+
+                <section id="6.3">
+                    <h3>6.3 Visualise the Card 23 from Sheet 6 || The Most likely to Be Mean from the most Consistent
+                        Sheet
+                    </h3>
+
+
+                    <p>
+                        Let's see how our select card looks like ..
+                    </p>
+                    <img src="https://i.imghippo.com/files/JIVO31719194232.png" alt="" border="0">
+                    <br>
+                    <p>
+                        A very spontaneous difference can be observed, that is the color of the Square (6,2) of the card
+                        23 is very different from the MasterCard's one
+                    </p>
+
+                </section>
+
+
+                <section id="6.4">
+                    <h3>6.4 Visualise Circular Difference between the Card 23 from Sheet 6 with MasterCard </h3>
+
+                    <br>
+                    <h3>The intution behind plot</h3>
+                    <p>
+                        In the following plot, del E is being calculated for the Card 23 from Sheet 6 with MasterCard. Now as an observer may be intersted to know huw intensely, each color square differ from each other, so for that intensity of delta E has been calculated and visualised in the rectangle, background of the Overlapped Circular Blocks, where left one is the from card 23 from Sheet 6 and right one is the MasterCard. This gives an idea of the most accurate color square out of 64 squares.
+                    </p>
+                    <img src="https://i.imghippo.com/files/MO5Fs1719194794.png" alt="" border="0">
+
+                    <br>
+                    <h3> Explanation </h3>
+                    <p>
+                        The plot visualizes the color differences between "Card 23" from "Sheet 6" and the reference "MasterCard." It uses background intensity and color overlays to highlight discrepancies. The intensity of each cell's background is based on the color difference, calculated using Euclidean distance in the L*, a*, b* color space, and normalized to a maximum value of 100. This grayscale background, where darker shades indicate higher color differences, provides a clear indication of color variance. Overlaid on each cell are two circles representing the actual colors from the ideal card and the MasterCard, with colors converted from L*, a*, b* values to RGB for accurate visualization. The gridlines enhance the clarity of individual sections, and a color bar labeled "Color Difference Intensity" offers a reference scale. The Y-axis is inverted for standard visual orientation. This combined approach of intensity mapping and color overlays offers a comprehensive view of color discrepancies, crucial for quality control in color-critical applications. The plot effectively identifies areas of significant color variance, aiding in a detailed analysis of color accuracy between the cards.
+                    </p>
+                </section>
+
+
+
+
+
+
+                <section id="Closest_Cards_to_Mean_Visualization">
+                    <h3>6.3 Closest Cards to Mean Visualization</h3>
+                    <article>
+                        <p>
+                            The code calculates average L*a*b values for each row of cards on every sheet. It then finds
+                            the
+                            card on each sheet that is closest in color to this average to measure the color difference.
+                            Additionally, it compares the average color of a "master" card to the averages of all
+                            sheets,
+                            identifying which sheet's colors are most similar to the master. The results show which card
+                            on
+                            each
+                            sheet matches its average color best and which sheet overall is closest to the master
+                            standard.
+                        </p>
+                        <p>
+                            To visualize the results, a bar chart is used where each bar represents a sheet. Shorter
+                            bars
+                            indicate that the cards on that sheet closely match its average color,showing higher color
+                            consistency.
+                        </p>
+                    </article>
+                </section>
+
+
+                <footer>
+                    <img src="https://i.ibb.co/7QJGPGk/colord-Histogram.jpg" alt="colord-Histogram" />
+                </footer>
             </article>
         </section>
-        <footer>
-            <img src="https://i.ibb.co/7QJGPGk/colord-Histogram.jpg" alt="colord-Histogram" />
-        </footer>
+
+
+
+
+
 
 
 
