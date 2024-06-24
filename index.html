@@ -86,6 +86,12 @@
 
 
                 <li><a href="#Variance Calculation">5. Variance Calculation </a></li>
+                <ul>
+                    <li><a href="#5.1">5.1 Find Variance for Each Trial/Sheet</a></li>
+                    <li><a href="#5.2">5.2 Find the Sheet with minimum Variance</a></li>
+                    <li><a href="#5.3">5.3 Normalised Efficiency Distribution of 42 Cards from Sheet 6 with
+                            MasterCard</a></li>
+                </ul>
             </ul>
             <ul>
                 <li><a href="#Closest_Cards_to_Mean_Visualization">6. Closest Cards to Mean Visualization</a></li>
@@ -702,7 +708,7 @@
 
 
 
-                    <section id="Ring Plot Visualisation for Shared Error Contributio">
+                    <section id="Ring Plot Visualisation for Shared Error Contribution">
 
                         <h3><strong>4.3.6 Donut Chart Visualisation for Shared Error Contributio :</strong></h3>
 
@@ -730,19 +736,22 @@
                                 "Best card" with minimum del E in that specific sheet amongst 42 cards.
                             </p>
 
-                            </p <section id="4.4.1">
-                            <h3>4.4.1 Heatmap Visualisation : Accuracy of trials across all Sheets</h3>
-                            <p>
-                                The script visualizes these findings by plotting 13 heatmaps, illustrating the accuracy
-                                of trials across all sheets, with each heatmap representing a different sheet's data.
-                                These visualizations help in understanding how closely each trial card matches the
-                                master card, aiding in evaluating experimental outcomes efficiently.
                             </p>
-                            <img src="https://i.imghippo.com/files/qSVcl1719183247.png" alt="Image" width="700"
-                                height="auto" class="center">
+                            <section id="4.4.1">
+                                <h3>4.4.1 Heatmap Visualisation : Accuracy of trials across all Sheets</h3>
+                                <p>
+                                    The script visualizes these findings by plotting 13 heatmaps, illustrating the
+                                    accuracy
+                                    of trials across all sheets, with each heatmap representing a different sheet's
+                                    data.
+                                    These visualizations help in understanding how closely each trial card matches the
+                                    master card, aiding in evaluating experimental outcomes efficiently.
+                                </p>
+                                <img src="https://i.imghippo.com/files/qSVcl1719183247.png" alt="Image" width="700"
+                                    height="auto" class="center">
 
-                            <h3><strong>The Code Snippet </strong></h3>
-                            <pre><code>
+                                <h3><strong>The Code Snippet </strong></h3>
+                                <pre><code>
     # Plotting the 13 heatmaps
     fig, axs = plt.subplots(4, 4, figsize=(15, 15))
     axs = axs.flatten()
@@ -768,21 +777,30 @@
     plt.show()
 
 </code></pre>
-                    </section>
+                            </section>
 
-                    <section id=" 4.4.2">
-                        <h3>4.4.2 Circular Color Difference with MasterCard : Accuracy of trials across Sheets
-                        </h3>
+                            <section id="4.4.2">
+                                <h3>4.4.2 Circular Color Difference with MasterCard : Accuracy of trials across Sheets
+                                </h3>
 
-                        <p>
+                                <p>
 
-                            We visualize the color differences by plotting 13 subplots (arranged in a 3x5 grid) using Matplotlib. Each subplot represents a sheet from our dataset, where we identify and highlight the color card with the minimal delta E (color difference) compared to a predefined master card. Circles within each subplot depict the Lab color values of the ideal card (found to have minimal delta E) and the master card. The color of each square indicates the magnitude of color difference between the ideal card and the master card, ranging from black (no difference) to white (maximum difference). This visual approach helps in understanding how closely each experimental trial matches the master card, aiding in evaluating trial accuracy across all sheets effectively.
-                        </p>
+                                    We visualize the color differences by plotting 13 subplots (arranged in a 3x5 grid)
+                                    using Matplotlib. Each subplot represents a sheet from our dataset, where we
+                                    identify and highlight the color card with the minimal delta E (color difference)
+                                    compared to a predefined master card. Circles within each subplot depict the Lab
+                                    color values of the ideal card (found to have minimal delta E) and the master card.
+                                    The color of each square indicates the magnitude of color difference between the
+                                    ideal card and the master card, ranging from black (no difference) to white (maximum
+                                    difference). This visual approach helps in understanding how closely each
+                                    experimental trial matches the master card, aiding in evaluating trial accuracy
+                                    across all sheets effectively.
+                                </p>
 
-                        <img src="https://i.imghippo.com/files/4e6l91719183307.png" alt="Image" width="1200"
-                            height="auto" class="center">
-                        <h3><strong>The Code Snippet </strong></h3>
-<pre><code>
+                                <img src="https://i.imghippo.com/files/4e6l91719183307.png" alt="Image" width="1200"
+                                    height="auto" class="center">
+                                <h3><strong>The Code Snippet </strong></h3>
+                                <pre><code>
     # Iterate through each sheet to plot minimum delta E cards
     plot_counter = 0
     for sheet_id, sheet in demo_sheets.items():
@@ -848,26 +866,183 @@
     plt.show()
 
 </code></pre>
+                            </section>
+
+                        </article>
                     </section>
 
+
+                    </p>
+                    <br>
                 </article>
             </section>
+        </section>
 
 
-            </p>
-            <br>
-            </article>
-        </section>
-        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <section id="Variance Calculation">
             <h2>5. Variance Calculation</h2>
             <article>
                 <p>
-                    all variance of 13 sheets.
+                    In this part, we are trying to narrow down our approach to this problem, by finding the most
+                    efficient trial, that is least variant trial, or the trial that has minimum variance.
                 </p>
+
+                <section id="5.1">
+                    <h3>5.1 Find Variance for Each Trial/Sheet</h3>
+
+                    <p>
+                        This function, "calculate_variance_for_sheet", helps us understand the diversity of colors
+                        across a collection of color cards. Imagine each color card as a collection of numbers that
+                        describe its color: how bright it is (L), how much red or green it has (a), and how much blue or
+                        yellow it has (b). This function looks at all these numbers from all the color cards in a sheet,
+                        calculates how much these numbers vary from card to card, and then gives us a single number that
+                        tells us, on average, how much the colors differ across all the cards. This helps in
+                        understanding if the colors in the group are mostly similar or if there's a wide range of
+                        different colors present. It's like measuring 'how consistent or varied the colors are in a set
+                        of card in the particular sheet.
+
+                    </p>
+
+                    <pre><code>
+    def calculate_variance_for_sheet(sheet):
+    lab_values = []
+    for card_df in sheet.values():
+        lab_values.append(card_df[['L', 'a', 'b']].values)  # Extract L*a*b* values from DataFrame
+
+    lab_values = np.concatenate(lab_values, axis=0)
+    return np.var(lab_values, axis=0).mean()
+    
+</code></pre>
+
+                </section>
+
+
+                <section id="5.2">
+                    <h3>5.2 Find the Sheet with minimum Variance </h3>
+                    <p>
+                        It calculates the variance of color properties for each sheet, finds the sheet with the minimum
+                        variance, and then prints its identifier (min_variance_sheet_id) along with variance values for
+                        all sheets. Finally, it retrieves the color cards from this sheet (min_variance_sheet) for
+                        further examination or presentation. This helps in determining which group of color cards shows
+                        the most consistent colors across the dataset.
+
+                        As a result we find the sheet Number 6 is the most consistent trial amongs all the 13 trials
+
+                    </p>
+
+                    <pre><code>
+    min_variance_sheet_id = min(variances, key=variances.get)
+
+    print(f"Sheet with minimum variance is: {min_variance_sheet_id}")
+    print(f"Variance values for each sheet: {variances}")
+
+    # Accessing the sheet with minimum variance
+    min_variance_sheet = sheets[min_variance_sheet_id]
+
+</code></pre>
+                    <h3>Output</h3>
+                    <pre><code>
+    Sheet with minimum variance is: 5
+    Variance values for each sheet: {'0': 313.98876421195024, '1': 311.23875731943366, '2': 314.87699874555045, '3': 315.02180117684867, '4': 308.6178636086258, '5': 303.3818061495981, '6': 306.7759366134873, '7': 310.5400739589045, '8': 318.49616522486843, '9': 309.8834551776406, '10': 309.16972715804945, '11': 310.8522839363206, '12': 307.5054587806306}
+    
+</code></pre>
+
+                </section>
+
+
+
+
+                <section id="5.3">
+                    <h3>5.3 Normalised Efficiency Distribution of 42 Cards from Sheet 6 with MasterCard</h3>
+
+
+                    <h3><strong>The Intution Behind Normalised Efficiency Distribution :</strong></h3>
+
+                    <p>
+                        After we have found the most consistent trial sheet, we want to visualise how the each 42 cards
+                        was close to the MasterCard, in other words, How the efficiency of the 42 cards distributed so
+                        that we can haveidea of Trial Progession in the SHeet Number 6. It is worth to note, that as the
+                        trial approach to the end, the chance of error diminish for the colors near to the Gap, but this
+                        is not strongly consistent for the colors on the far edge.
+                    </p>
+
+                    <pre><code>
+for i in range(8):
+    for j in range(8):
+        delta_e_values = []
+        color_block_master = master_card.iloc[8*i + j]
+        for color_card in least_variant_sheet.values():
+            color_block_other = color_card.iloc[8*i + j]
+            L_master, a_master, b_master = color_block_master['L'], color_block_master['a'], color_block_master['b']
+            L_other, a_other, b_other = color_block_other['L'], color_block_other['a'], color_block_other['b']
+            delta_e_values.append(calculate_delta_e(L_master, a_master, b_master, L_other, a_other, b_other))
+
+</code></pre>
+
+                    <h3> Data Normalisation</h3>
+                    <pre><code>
+    # Normalize ΔE values within each square
+    normalized_delta_e_values = (delta_e_values - np.min(delta_e_values)) / (np.max(delta_e_values) - np.min(delta_e_values))
+                        
+</code></pre>
+
+                    <br>
+                    <h3> Visualisation</h3>
+                    <img src="https://i.imghippo.com/files/XUop21719189512.png" alt="" border="0">
+
+                </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </article>
         </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <section id="Closest_Cards_to_Mean_Visualization">
             <h2>6. Closest Cards to Mean Visualization</h2>
             <article>
